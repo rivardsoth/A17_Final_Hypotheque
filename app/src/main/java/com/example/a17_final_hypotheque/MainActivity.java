@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton rad5, rad10, rad15, rad25;
     private EditText txtTaux, txtEmprunt;
     private TextView lblError;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,16 +50,15 @@ public class MainActivity extends AppCompatActivity {
         int option = item.getItemId();
         if (option == R.id.mnCalculer) {
             double valide = Double.parseDouble(CalculerHypotheque());
-            if (valide < 0){
+            if (valide < 0) {
                 lblError.setText("Erreur dans la saisie de donnée!!");
-            }
-            else {
+            } else {
                 lblError.setText(String.valueOf(valide));
             }
 
-        }else if (option == R.id.mnReour){
+        } else if (option == R.id.mnReour) {
 
-        }else {
+        } else {
 
         }
         return super.onOptionsItemSelected(item);
@@ -68,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
         if (!validerTaux() || !validerEmprunt()) {
             Toast.makeText(MainActivity.this, "Erreur de donnée!!", Toast.LENGTH_LONG).show();
             return "-1";
-        }
-        else {
+        } else {
 
             int nbAnnee = getAnnee();
             double tauxA = getTaux();
@@ -93,40 +92,49 @@ public class MainActivity extends AppCompatActivity {
     private int getAnnee() {
         int nbAnnee;
         int id = radGroup.getCheckedRadioButtonId();
-        if (id == R.id.rad5){
+        if (id == R.id.rad5) {
             nbAnnee = Integer.parseInt(getResources().getString(R.string._5_ans));
-        }else if(id == R.id.rad10){
+        } else if (id == R.id.rad10) {
             nbAnnee = Integer.parseInt(getResources().getString(R.string._10_ans));
-        }else if(id == R.id.rad15){
+        } else if (id == R.id.rad15) {
             nbAnnee = Integer.parseInt(getResources().getString(R.string._15_ans));
-        }else{
+        } else {
             nbAnnee = Integer.parseInt(getResources().getString(R.string._25_ans));
         }
         return nbAnnee;
     }
 
     private boolean validerTaux() {
-        double tauxM = Double.parseDouble(txtTaux.getText().toString());
-        if (tauxM < 0 || tauxM >100) {
+        try {
+            double tauxM = Double.parseDouble(txtTaux.getText().toString());
+
+            if (tauxM < 0 || tauxM > 100) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (NumberFormatException e) {
             return false;
         }
-        else{
-            return true;
-        }
+
     }
 
     private boolean validerEmprunt() {
-        double emprunt = Double.parseDouble(txtEmprunt.getText().toString());
-        if (emprunt < 0) {
+        try {
+            double emprunt = Double.parseDouble(txtEmprunt.getText().toString());
+            if (emprunt < 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (NumberFormatException e) {
             return false;
         }
-        else{
-            return true;
-        }
     }
-    
+
     private double getTaux() {
         double tauxM = Double.parseDouble(txtTaux.getText().toString());
-        return tauxM/100;
+        return tauxM / 100;
     }
+
 }
