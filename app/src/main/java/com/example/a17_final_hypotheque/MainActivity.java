@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup radGroup;
     private RadioButton rad5, rad10, rad15, rad25;
     private EditText txtTaux, txtEmprunt;
+    private TextView lblError;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         rad25 = findViewById(R.id.rad25);
         txtTaux = findViewById(R.id.txtTaux);
         txtEmprunt = findViewById(R.id.txtEmprunt);
+        lblError = findViewById(R.id.lblError);
     }
 
     @Override
@@ -45,7 +48,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int option = item.getItemId();
         if (option == R.id.mnCalculer) {
-            CalculerHypotheque();
+            double valide = Double.parseDouble(CalculerHypotheque());
+            if (valide < 0){
+                lblError.setText("Erreur dans la saisie de donnée!!");
+            }
+            else {
+                lblError.setText(String.valueOf(valide));
+            }
+
         }else if (option == R.id.mnReour){
 
         }else {
@@ -55,18 +65,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String CalculerHypotheque() {
-        int nbAnnee = getAnnee();
-        double tauxM = getTaux();
-        double emprunt = getEmprunt();
+        if (!validerTaux() || !validerEmprunt()) {
+            Toast.makeText(MainActivity.this, "Erreur de donnée!!", Toast.LENGTH_LONG).show();
+            return "-1";
+        }
+        else {
 
-        double result = (((tauxM/12) * emprunt) / (1 - (1 / Math.pow(1 + (tauxM/12), 12 * nbAnnee))));
+            int nbAnnee = getAnnee();
+            double tauxA = getTaux();
+            double emprunt = getEmprunt();
 
-        // Create a DecimalFormat object to format the result to two decimal places
-        DecimalFormat df = new DecimalFormat("#.00");
+            double result = (((tauxA / 12) * emprunt) / (1 - (1 / Math.pow(1 + (tauxA / 12), 12 * nbAnnee))));
 
-        // Format the result
-        String formattedResult = df.format(result);
-        return formattedResult;
+            // Create a DecimalFormat object to format the result to two decimal places
+            DecimalFormat df = new DecimalFormat("#.00");
+
+            // Format the result
+            String formattedResult = df.format(result);
+            return formattedResult;
+        }
     }
 
     private double getEmprunt() {
@@ -91,6 +108,16 @@ public class MainActivity extends AppCompatActivity {
     private boolean validerTaux() {
         double tauxM = Double.parseDouble(txtTaux.getText().toString());
         if (tauxM < 0 || tauxM >100) {
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    private boolean validerEmprunt() {
+        double emprunt = Double.parseDouble(txtEmprunt.getText().toString());
+        if (emprunt < 0) {
             return false;
         }
         else{
