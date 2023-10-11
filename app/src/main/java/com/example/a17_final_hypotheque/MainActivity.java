@@ -15,11 +15,18 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
+import modele.Hypotheque;
+
 public class MainActivity extends AppCompatActivity {
     private RadioGroup radGroup;
     private RadioButton rad5, rad10, rad15, rad25;
     private EditText txtTaux, txtEmprunt;
     private TextView lblError;
+
+    private double tauxAnnuel;
+    private double emprunt;
+    private double Map;
+    private int nbAnnee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +56,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int option = item.getItemId();
         if (option == R.id.mnCalculer) {
-            double valide = Double.parseDouble(CalculerHypotheque());
-            if (valide < 0) {
+            Map = Double.parseDouble(CalculerHypotheque());
+            if (Map< 0) {
                 lblError.setText("Erreur dans la saisie de donnée!!");
             } else {
-                lblError.setText(String.valueOf(valide));
+                lblError.setText(String.valueOf(Map));
+                Intent intent = new Intent(MainActivity.this, ResultatActivity.class);
+                Hypotheque hyp = new Hypotheque(tauxAnnuel,emprunt,Map,nbAnnee);
+                intent.putExtra("hyp", hyp);
+                startActivity(intent);
             }
 
         } else if (option == R.id.mnReour) {
@@ -70,11 +81,11 @@ public class MainActivity extends AppCompatActivity {
             return "-1";
         } else {
 
-            int nbAnnee = getAnnee();
-            double tauxA = getTaux();
-            double emprunt = getEmprunt();
+            nbAnnee = getAnnee();
+            tauxAnnuel = getTaux();
+            emprunt = getEmprunt();
 
-            double result = (((tauxA / 12) * emprunt) / (1 - (1 / Math.pow(1 + (tauxA / 12), 12 * nbAnnee))));
+            double result = (((tauxAnnuel / 12) * emprunt) / (1 - (1 / Math.pow(1 + (tauxAnnuel / 12), 12 * nbAnnee))));
 
             // Create a DecimalFormat object to format the result to two decimal places
             DecimalFormat df = new DecimalFormat("#.00");
