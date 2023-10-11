@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">A17_Final_Hypotheque</string>
+    <string name="_5_ans">5</string>
+    <string name="_10_ans">10</string>
+    <string name="_15_ans">15</string>
+    <string name="_25_ans">25</string>
 </resources>
