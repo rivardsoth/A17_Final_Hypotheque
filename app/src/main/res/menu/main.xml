@@ -10,4 +10,8 @@
         android:id="@+id/mnReour"
         android:title="Retour"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/mnListing"
+        android:title="Afficher"
+        app:showAsAction="collapseActionView" />
 </menu>

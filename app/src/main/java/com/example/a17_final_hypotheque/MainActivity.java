@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
+import modele.DbHypothequeAdapter;
 import modele.Hypotheque;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,12 +28,14 @@ public class MainActivity extends AppCompatActivity {
     private double emprunt;
     private double Map;
     private int nbAnnee;
+    private DbHypothequeAdapter dbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setWidgets();
+        dbAdapter = new DbHypothequeAdapter(MainActivity.this);
     }
 
     private void setWidgets() {
@@ -63,14 +66,16 @@ public class MainActivity extends AppCompatActivity {
                 lblError.setText(String.valueOf(Map));
                 Intent intent = new Intent(MainActivity.this, ResultatActivity.class);
                 Hypotheque hyp = new Hypotheque(tauxAnnuel,emprunt,Map,nbAnnee);
+                dbAdapter.ajouterHypotheque(hyp);
                 intent.putExtra("hyp", hyp);
                 startActivity(intent);
             }
 
         } else if (option == R.id.mnReour) {
 
-        } else {
-
+        } else if (option == R.id.mnListing){
+            Intent intent = new Intent(MainActivity.this, ListingActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

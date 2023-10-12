@@ -49,6 +49,9 @@ public class ResultatActivity extends AppCompatActivity {
 
         } else if (option == R.id.mnReour) {
             this.finish();
+        }else if (option == R.id.mnListing){
+            Intent intent = new Intent(ResultatActivity.this, ListingActivity.class);
+            startActivity(intent);
         } else {
 
         }
