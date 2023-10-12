@@ -1,6 +1,7 @@
 package modele;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 public class Hypotheque implements Serializable {
     private double tauxAnnuel;
@@ -15,8 +16,13 @@ public class Hypotheque implements Serializable {
         this.emprunt = emprunt;
         this.Map = map;
         this.nbAnnee = nbAnnee;
-        this.montantTotaleApresHyp = map*nbAnnee*12;
-        this.difference = montantTotaleApresHyp - emprunt;
+        // Create a DecimalFormat object to format the result to two decimal places
+        DecimalFormat df = new DecimalFormat("#.00");
+        // Format the result
+        String formattedResult = df.format(map*nbAnnee*12);
+        this.montantTotaleApresHyp = Double.parseDouble(formattedResult);
+        formattedResult = df.format(montantTotaleApresHyp - emprunt);
+        this.difference = Double.parseDouble(formattedResult);
 
     }
 
